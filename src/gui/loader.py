@@ -181,7 +181,7 @@ class VideoLoaderWidget(QWidget):
             self.load_btn.setEnabled(False)
             self.load_btn.setText("Downloading...")
             
-            output_path = os.path.join(tempfile.gettempdir(), f"cached_{__import__('time').strftime('%Y%m%d-%H%M%S')}")
+            output_path = os.path.join(tempfile.gettempdir(), f"cached_{__import__('time').strftime('%Y%m%d-%H%M%S')}.mp4")
             self.video_path = download_video(source, output_path, browser=self.browser_combo.currentText())
             
             self._fetch_metadata(self.video_path)
