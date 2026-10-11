@@ -295,7 +295,7 @@ class VerificationWidget(QWidget):
         total = sum(s.duration for s in corrected)
     
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        base_output_dir = os.path.join(script_dir, "..", "..", "output")
+        base_output_dir = os.path.normpath(os.path.join(script_dir, "..", "..", "output"))
         os.makedirs(base_output_dir, exist_ok=True)
     
         timestamp_str = datetime.datetime.now().strftime("%y%m%d%H%M%S")

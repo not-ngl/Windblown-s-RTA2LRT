@@ -103,50 +103,36 @@ def get_video_duration(video_path: str) -> float:
 
 # ─── Visual Analysis ─────────────────────────────────────────────────────────
 
-def extract_frame_rgb(video_path: str, timestamp_sec: float) -> Optional[np.ndarray]:
+def extract_frame_rgb(
+    video_path: str,
+    timestamp_sec: float,
+) -> Optional[np.ndarray]:
     """
     Extract a single RGB frame at a given timestamp.
-    Returns (height, width, 3) uint8 array or None.
+    Returns (640, 360, 3) uint8 array or None.
     """
+    width, height = 640, 360
+
     cmd = [
         "ffmpeg",
         "-ss", f"{float(timestamp_sec):.3f}",
         "-i", video_path,
         "-frames:v", "1",
+        "-vf", f"scale={width}:{height}",
         "-f", "rawvideo",
         "-pix_fmt", "rgb24",
         "-hide_banner",
         "-loglevel", "error",
         "-"
     ]
+
     result = subprocess.run(cmd, capture_output=True)
-    if result.returncode != 0 or len(result.stdout) == 0:
+    expected_bytes = width * height * 3
+
+    if result.returncode != 0 or len(result.stdout) != expected_bytes:
         return None
 
-    raw = result.stdout
-    # Try common 360p dimensions (format 18 is typically 640x360)
-    for (w, h) in [(640, 360), (480, 270), (1280, 720), (854, 480), (426, 240)]:
-        expected = w * h * 3
-        if len(raw) >= expected:
-            frame = np.frombuffer(raw[:expected], dtype=np.uint8).reshape(h, w, 3)
-            return frame
-
-    # Fallback: probe dimensions
-    probe_cmd = [
-        "ffprobe", "-v", "quiet", "-select_streams", "v:0",
-        "-show_entries", "stream=width,height",
-        "-of", "csv=p=0", video_path
-    ]
-    probe_result = subprocess.run(probe_cmd, capture_output=True, text=True)
-    if probe_result.returncode == 0 and probe_result.stdout.strip():
-        parts = probe_result.stdout.strip().split(",")
-        w, h = int(parts[0]), int(parts[1])
-        expected = w * h * 3
-        if len(raw) >= expected:
-            return np.frombuffer(raw[:expected], dtype=np.uint8).reshape(h, w, 3)
-
-    return None
-
+    return np.frombuffer(result.stdout, dtype=np.uint8).reshape(height, width, 3).copy()
 
 def rgb_to_hsv(rgb: np.ndarray) -> np.ndarray:
     """Convert RGB uint8 array to HSV float (H: 0-360, S: 0-1, V: 0-1)."""

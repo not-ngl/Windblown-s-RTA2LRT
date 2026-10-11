@@ -7,7 +7,7 @@ A tool designed to help speedrun.com moderators identify and remove loading time
 ## Features
 
 - **GUI support** — Simple GUI to run including the entire workflow
-- **Spectrogram Visualization** — Audio-based waveform display to quickly locate loading regions
+- **Dynamic Spectrogram** — Real-time rendering with zoom/pan support for smooth navigation
 - **Automatic Boundary Expansion** — Expands anchor points into start/end timestamps using color analysis
 - **Frame-Accurate Verification** — Keyboard navigation for sub-second precision (30fps video support)
 - **Multi-Segment Support** — Process multiple loading times in a single submission
@@ -35,6 +35,7 @@ Install via `pip install -r requirements.txt`:
 - `scipy` — Audio signal processing
 - `numpy` — Numerical computations
 - `yt-dlp` — YouTube video downloader using URL and your cookies
+- `pyqtgraph` — Dynamic display of the spectrogram
 
 ---
 
@@ -104,7 +105,7 @@ Ensure to be connected to a YouTube account.
 
 1. **Launch the GUI**: `python run_gui.py`
 2. **Provide a video** via local file or URL (ensure to select the browser you are using)
-3. **Use the Spectrogram** to find loading regions (mark segments where in-game timer is active; they appear quiet/black)
+3. **Navigate the Spectrogram**: zoom with mouse wheel, drag to pan. Find loading regions (they appear quiet/black)
 4. **Let the tool auto-detect** the approximate boundaries
 5. **Locate precise frames** using h/j/k/l keys to find the first visible purple loading frame
 6. **Export** — output files help moderators verify the results
