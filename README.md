@@ -51,7 +51,7 @@ cd Windblown-s-RTA2LRT
 # Setup a virtual environment
 python3 -m venv [A new virtual environment]
 source [A new virtual environment]/bin/activate
-pip3 install -r requirements
+pip3 install -r requirements.txt
 
 # Ensure you have ffmpeg, deno installed
 ffmpeg -version 
@@ -64,7 +64,7 @@ python3 run_gui.py
 ### Windows
 
 #### Step 1: Install Python
-Download from `python.org` using the PyInstaller. Ensure to check the box Add Python to PART during the installation process.
+Download from `python.org` using the PyInstaller. Ensure to check the box Add Python to PATH during the installation process.
 
 #### Step 2: Install ffmpeg
 Download from `ffmpeg.org` the latest stable release of ffmpeg. 
